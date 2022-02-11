@@ -4,13 +4,12 @@ use std::thread;
 const NUM_THREADS: usize = 6;
 
 fn main() {
-    let func = |x| x + 69;
     let mut data = Vec::new();
     for i in 1..500_000_001_i32 {
         data.push(i)
     }
-    let first = data.clone().into_iter().map(func).collect::<Vec<i32>>();
-    let second = split_on_threads(data, func);
+    let first = data.iter().map(|x| x + 69).collect::<Vec<i32>>();
+    let second = split_on_threads(data, |x| x + 69);
     assert!(first == second);
     println!("First {} Second {}", first.len(), second.len());
     assert!(first.len() == second.len())
