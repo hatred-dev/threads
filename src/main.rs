@@ -3,17 +3,7 @@ use std::thread;
 //our threshold
 const NUM_THREADS: usize = 6;
 
-fn main() {
-    let mut data = Vec::new();
-    for i in 1..500_000_001_i32 {
-        data.push(i)
-    }
-    let first = data.iter().map(|x| x + 69).collect::<Vec<i32>>();
-    let second = split_on_threads(data, |x| x + 69);
-    assert!(first == second);
-    println!("First {} Second {}", first.len(), second.len());
-    assert!(first.len() == second.len())
-}
+fn main() {}
 
 fn split_on_threads<'a, T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
 where
@@ -41,5 +31,21 @@ where
             }
             result
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_identity_of_data() {
+        let mut data = Vec::new();
+        for i in 1..500_000_001_i32 {
+            data.push(i)
+        }
+        let first = data.iter().map(|x| x + 69).collect::<Vec<i32>>();
+        let second = split_on_threads(data, |x| x + 69);
+        assert!(first == second);
+        assert!(first.len() == second.len())
     }
 }
