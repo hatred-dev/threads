@@ -12,7 +12,8 @@ fn main() {
     let first = data.clone().into_iter().map(func).collect::<Vec<i32>>();
     let second = split_on_threads(data, func);
     assert!(first == second);
-    println!("{:?}", second.len());
+    println!("First {} Second {}", first.len(), second.len());
+    assert!(first.len() == second.len())
 }
 
 fn split_on_threads<'a, T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
