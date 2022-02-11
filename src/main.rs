@@ -14,7 +14,7 @@ fn main() {
     println!("Size {}. Same: {}", result.len(), length == result.len());
 }
 
-fn split_on_threads<T, R>(data: Vec<T>, f: fn(t: T) -> R) -> Vec<R>
+fn split_on_threads<T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
 where
     T: 'static + Sync + Send + Clone,
     R: 'static + Sync + Send,
@@ -23,7 +23,7 @@ where
         len if len <= NUM_THREADS => {
             //memory preallocation makes program a bit faster
             let mut result = Vec::with_capacity(len);
-            data.into_iter().for_each(|i| result.push(f(i)));
+            data.into_iter().for_each(|i| result.push(func(i)));
             result
         }
         len => {
@@ -33,7 +33,7 @@ where
                 let thread_send = send.clone();
                 thread::spawn(move || {
                     thread_send
-                        .send(chunk.into_iter().map(f).collect::<Vec<R>>())
+                        .send(chunk.into_iter().map(func).collect::<Vec<R>>())
                         .unwrap()
                 });
             }
