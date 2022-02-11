@@ -5,7 +5,7 @@ const NUM_THREADS: usize = 6;
 
 fn main() {}
 
-fn split_on_threads<'a, T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
+fn split_on_threads<T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
 where
     T: 'static + Sync + Send + Clone,
     R: 'static + Sync + Send,
