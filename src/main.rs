@@ -18,7 +18,7 @@ where
             result
         }
         len => {
-            let holder_size = len / NUM_THREADS;
+            let holder_size = len / NUM_THREADS + 1;
             let mut threads = Vec::new();
             let mut result = Vec::with_capacity(len);
             for chunk in data.chunks(holder_size).map(|chunk| chunk.to_owned()) {
@@ -37,14 +37,22 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use thread_splitter::duration;
+
     #[test]
     fn test_identity_of_data() {
         let mut data = Vec::new();
         for i in 1..500_000_001_i32 {
             data.push(i)
         }
-        let first = data.iter().map(|x| x + 69).collect::<Vec<i32>>();
-        let second = split_on_threads(data, |x| x + 69);
+        let (first, first_dur) = duration!(data
+            .iter()
+            .map(|x| (*x as f64).log(3.33))
+            .collect::<Vec<f64>>());
+        println!("Duration single thread {:?}", first_dur);
+        let (second, second_dur) = duration!(split_on_threads(data, |x| (x as f64).log(3.33)));
+        println!("Duration multithread {:?}", second_dur);
+        assert!(first_dur > second_dur);
         assert!(first == second);
         assert!(first.len() == second.len())
     }
