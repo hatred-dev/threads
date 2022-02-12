@@ -43,8 +43,9 @@ mod tests {
 
     #[test]
     fn test_identity_of_data() {
-        let mut data = Vec::new();
-        for i in 1..500_000_001_i32 {
+        let size = 500_000_000_i32;
+        let mut data = Vec::with_capacity(size as usize);
+        for i in 1..size + 1 {
             data.push(i)
         }
         let (first, first_dur) = duration!(data
