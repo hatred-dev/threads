@@ -1,10 +1,12 @@
 use std::thread;
 
+#[allow(dead_code)]
 //our threshold
 const NUM_THREADS: usize = 6;
 
 fn main() {}
 
+#[allow(dead_code)]
 fn split_on_threads<T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
 where
     T: 'static + Sync + Send + Clone,
