@@ -49,10 +49,11 @@ mod tests {
         }
         let (first, first_dur) = duration!(data
             .iter()
-            .map(|x| (*x as f64).log(3.33))
+            .map(|x| (*x as f64).log(3.33).log10())
             .collect::<Vec<f64>>());
         println!("Duration single thread {:?}", first_dur);
-        let (second, second_dur) = duration!(split_on_threads(data, |x| (x as f64).log(3.33)));
+        let (second, second_dur) =
+            duration!(split_on_threads(data, |x| (x as f64).log(3.33).log10()));
         println!("Duration multithread {:?}", second_dur);
         assert!(first_dur > second_dur);
         assert!(first == second);
