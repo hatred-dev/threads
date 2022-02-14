@@ -9,8 +9,8 @@ fn main() {}
 #[allow(dead_code)]
 fn split_on_threads<T, R>(data: Vec<T>, func: fn(t: T) -> R) -> Vec<R>
 where
-    T: 'static + Sync + Send + Clone,
-    R: 'static + Sync + Send,
+    T: 'static + Send + Clone,
+    R: 'static + Send,
 {
     match data.len() {
         len if len <= NUM_THREADS => {
