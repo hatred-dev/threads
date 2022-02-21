@@ -12,5 +12,3 @@ Threshold can be just constant.
 
 You should return:
    1. Up to you, but probably some Vec of the same length as input(1)
-
-Code should be published on github.
