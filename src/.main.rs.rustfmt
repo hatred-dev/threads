@@ -13,7 +13,12 @@ where
     R: 'static + Send,
 {
     match data.len() {
-        len if len <= NUM_THREADS => data.into_iter().map(|i| func(i)).collect(),
+        len if len <= NUM_THREADS => {
+            //memory preallocation makes program a bit faster
+            let mut result = Vec::with_capacity(len);
+            data.into_iter().for_each(|i| result.push(func(i)));
+            result
+        }
         len => {
             let mut threads = Vec::with_capacity(NUM_THREADS);
             let mut result = Vec::with_capacity(len);
