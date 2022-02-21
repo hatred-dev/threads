@@ -15,10 +15,12 @@ where
     match data.len() {
         len if len <= NUM_THREADS => data.into_iter().map(func).collect(),
         len => {
-            let chunk_size = len / NUM_THREADS;
-            let mut threads = Vec::with_capacity(len / chunk_size);
+            let mut threads = Vec::new();
             let mut result = Vec::with_capacity(len);
-            for chunk in data.chunks(chunk_size + 1).map(|chunk| chunk.to_owned()) {
+            for chunk in data
+                .chunks(len / NUM_THREADS + 1)
+                .map(|chunk| chunk.to_owned())
+            {
                 threads.push(thread::spawn(move || {
                     chunk.into_iter().map(func).collect::<Vec<R>>()
                 }));
