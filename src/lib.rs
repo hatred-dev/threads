@@ -1,10 +1,11 @@
 mod macros;
 use std::thread;
 
-pub fn split_on_threads<T, R>(data: Vec<T>, func: fn(t: T) -> R, threshold: usize) -> Vec<R>
+pub fn split_on_threads<T, R, F>(data: Vec<T>, func: F, threshold: usize) -> Vec<R>
 where
-    T: 'static + Send + Clone,
+    T: 'static + Send + Copy,
     R: 'static + Send,
+    F: 'static + Send + Copy + Fn(T) -> R,
 {
     match data.len() {
         len if len <= threshold => data.into_iter().map(func).collect(),
